@@ -33,22 +33,30 @@ class Projectile(pygame.sprite.Sprite):
             self.remove()
 
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, pos):
         # Call parent sprite class constructor
         pygame.sprite.Sprite.__init__(self)
         self.image =  pygame.Surface([60,60])
         self.image =  pygame.image.load("player.png").convert_alpha()
         self.image =  pygame.transform.scale(self.image, (60, 60))
         self.rect = self.image.get_rect()
-        self.rect.y = 300
+        self.rect.x = pos[0]
+        self.rect.y = pos[1]
+
+        self.health = 10
 
     def checkCollisions(self, bullets):
-    	pygame.sprite.spritecollide(bullets, self, 0)
+    	if pygame.sprite.spritecollide(self, bullets, 1):
+    		self.health -= 1
+    	if self.health <= 0:
+    		self.kill()
+    		
 
+ 
 
 world1 = {
 	'map':[Tree([300,100]), Tree([200,100]), Tree([50,400])],
-	'ent':[Enemy()],
+	'ent':[Enemy([100, 100])],
 	'background':""
 
 }
@@ -56,18 +64,22 @@ world1 = {
 
 class Level:
 	def __init__(self, world):
-		self.entities = world['ent']
 
 		self.world_sprites = pygame.sprite.Group()
+		self.entity_sprites = pygame.sprite.Group()
 		for obj in world['map']:
 			self.world_sprites.add(obj)
 
+		for ent in world['ent']:
+			self.entity_sprites.add(ent)
+
 	def run(self, bullets):
-		for ent in self.entities:
+		for ent in self.entity_sprites:
 			ent.checkCollisions(bullets)
 
 	def render(self, surface):
 		self.world_sprites.draw(surface)
+		self.entity_sprites.draw(surface)
 
 	def scroll(self, amount):
 		for spr in self.world_sprites:
