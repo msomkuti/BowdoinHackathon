@@ -24,15 +24,15 @@ while inTitle == 1:  # Enter title screen
     # CAN I MAKE ANIMATION WHERE CLICKED? EXTRA
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    for event in pg.event.get():
+    for event in pygame.event.get():
         if event.type == pg.MOUSEBUTTONUP:
-            mouse = pg.mouse.get_pos()  # Get our mouse position
+            mouse = pygame.mouse.get_pos()  # Get our mouse position
 
             if titlePos.collidepoint(mouse):
                 inTitle = 0  # Exit loop when we click start
 
-        if event.type == pg.QUIT:  # Quit if we want to
-            pg.quit()
+        if event.type == pygame.QUIT:  # Quit if we want to
+            pygame.quit()
 
 
 game = Game(windowSurface)
@@ -45,9 +45,12 @@ pygame.display.update()
 
 # run the game loop
 while True:
+
+    game.run()
+
     for event in pygame.event.get():
 
-        game.run()
+        game.player.move(event)
 
         if event.type == QUIT:
             pygame.quit()

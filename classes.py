@@ -16,6 +16,8 @@ class Tree:
 
 
 
+
+
 world1 = {
 	'map':[Tree([30,100])],
 	'ent':[],
@@ -33,12 +35,18 @@ class Level:
 		for obj in self.level_map:
 			obj.draw(surface)    
 
+class Player:
+
+	def move(self, event):
+		if event.type == pygame.MOUSEBUTTONDOWN:
+			print("yooooo")
 
 
 class Game:
 	def __init__(self, surface):
 		self.surface = surface
 		self.currentLevel = Level(world1)
+		self.player = Player()
 
 	def render(self):
 		self.currentLevel.render(self.surface)
