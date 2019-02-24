@@ -1,6 +1,6 @@
 import pygame, sys
 from pygame.locals import *
-
+from random import randint
 
 
 
@@ -19,7 +19,7 @@ class Projectile(pygame.sprite.Sprite):
     def __init__(self, centerx, centery):
         # Call parent sprite class constructor
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface([1,1])
+        self.image = pygame.Surface([7,7])
         self.image.fill((0,0,0))
         self.rect = self.image.get_rect()
         self.rect.x = centerx
@@ -32,16 +32,18 @@ class Projectile(pygame.sprite.Sprite):
         if self.rect.y <= 0:
             self.remove()
 
+#### STOCK ENEMY
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, pos):
         # Call parent sprite class constructor
         pygame.sprite.Sprite.__init__(self)
         self.image =  pygame.Surface([60,60])
-        self.image =  pygame.image.load("player.png").convert_alpha()
+        self.image =  pygame.image.load("Snowman2.png").convert_alpha()
         self.image =  pygame.transform.scale(self.image, (60, 60))
         self.rect = self.image.get_rect()
         self.rect.x = pos[0]
         self.rect.y = pos[1]
+
 
         self.health = 10
 
@@ -50,13 +52,62 @@ class Enemy(pygame.sprite.Sprite):
     		self.health -= 1
     	if self.health <= 0:
     		self.kill()
-    		
+
+    def move(self):
+    	return 0
+############## 
+
+
+
+class SideEnemy(pygame.sprite.Sprite):
+    def __init__(self, pos, direction):
+        # Call parent sprite class constructor
+        pygame.sprite.Sprite.__init__(self)
+        self.image =  pygame.Surface([60,60])
+        self.image =  pygame.image.load("Snowman2.png").convert_alpha()
+        self.image =  pygame.transform.scale(self.image, (60, 60))
+        self.rect = self.image.get_rect()
+        self.rect.x = pos[0]
+        self.rect.y = pos[1]
+
+        self.direction = direction
+        self.velocity = 40
+
+    def checkCollisions(self, bullets):
+    	return 0
+
+    def move(self):
+    	self.rect.x += self.direction * self.velocity
+
+
+class TurretEnemy(pygame.sprite.Sprite):
+    def __init__(self, pos):
+        # Call parent sprite class constructor
+        pygame.sprite.Sprite.__init__(self)
+        self.image =  pygame.Surface([60,60])
+        self.image =  pygame.image.load("Snowman2.png").convert_alpha()
+        self.image =  pygame.transform.scale(self.image, (60, 60))
+        self.rect = self.image.get_rect()
+        self.rect.x = pos[0]
+        self.rect.y = pos[1]
+
+
+        self.health = 5
+
+    def checkCollisions(self, bullets):
+    	if pygame.sprite.spritecollide(self, bullets, 1):
+    		self.health -= 1
+    	if self.health <= 0:
+    		self.kill()
+
+    def move(self):
+    	return 0     		
 
  
 
 world1 = {
-	'map':[Tree([300,100]), Tree([200,100]), Tree([50,400])],
-	'ent':[Enemy([100, 100])],
+	'map':[Tree([300,-100]), Tree([200,-180]), Tree([50,-100])],
+	'ent':[Enemy([100, 100]), SideEnemy([-100, 0], 1)],
 	'background':""
 
 }
@@ -76,6 +127,7 @@ class Level:
 	def run(self, bullets):
 		for ent in self.entity_sprites:
 			ent.checkCollisions(bullets)
+			ent.move()
 
 	def render(self, surface):
 		self.world_sprites.draw(surface)
@@ -92,7 +144,7 @@ class Hero(pygame.sprite.Sprite):
         # Call parent sprite class constructor
         pygame.sprite.Sprite.__init__(self)
         self.image =  pygame.Surface([60,60])
-        self.image =  pygame.image.load("player.png").convert_alpha()
+        self.image =  pygame.image.load("Skier.png").convert_alpha()
         self.image =  pygame.transform.scale(self.image, (60, 60))
         self.rect = self.image.get_rect()
         self.rect.y = 300
@@ -100,6 +152,7 @@ class Hero(pygame.sprite.Sprite):
         self.hero_sprites = pygame.sprite.Group()
         self.hero_sprites.add(self)
         self.hero_bullet_sprites = pygame.sprite.Group()
+        self.cooldown = 0
 
     def moveBullets(self):
     	for b in self.hero_bullet_sprites:
@@ -144,7 +197,11 @@ class Hero(pygame.sprite.Sprite):
         	self.rect.y -= yMove - moveSpeed - 2 ########## fix this bs
 
         if pressed[pygame.K_SPACE]:
-        	self.shoot()
+        	new_time = pygame.time.get_ticks()
+        	if (new_time - self.cooldown) > 200:
+        		self.shoot()
+        		self.cooldown = new_time
+        	print(new_time)
 
 
 
@@ -152,8 +209,6 @@ class Hero(pygame.sprite.Sprite):
     	self.moveBullets()
     	self.hero_sprites.draw(surface)
     	self.hero_bullet_sprites.draw(surface)
-
-
 
 
 
