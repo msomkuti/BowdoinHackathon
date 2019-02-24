@@ -1,6 +1,5 @@
 import pygame, sys
 from pygame.locals import *
-from classes import *
 
 # set up pygame
 pygame.init()
@@ -9,6 +8,9 @@ screenDim = {'width':1200, 'height':700}
 
 # set up the window
 windowSurface = pygame.display.set_mode((screenDim['width'], screenDim['height']))
+
+from classes import *
+clock = pygame.time.Clock()
 
 
 # draw the white background onto the surface
@@ -47,6 +49,7 @@ pygame.display.init()
 while True:
 
     game.run()
+    clock.tick(60)
 
     for event in pygame.event.get():
 
