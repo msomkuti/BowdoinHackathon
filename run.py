@@ -4,7 +4,7 @@ from pygame.locals import *
 # set up pygame
 pygame.init()
 
-screenDim = {'width':1200, 'height':700}
+screenDim = {'width':800, 'height':600}
 
 # set up the window
 windowSurface = pygame.display.set_mode((screenDim['width'], screenDim['height']))
@@ -22,9 +22,6 @@ windowSurface.fill(Color(255, 255, 255))
 inTitle = 0  # Stay in the title screen until start clicked 
 while inTitle == 1:  # Enter title screen
 
-    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    # CAN I MAKE ANIMATION WHERE CLICKED? EXTRA
-    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     for event in pygame.event.get():
         if event.type == pg.MOUSEBUTTONUP:
