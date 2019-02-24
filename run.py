@@ -1,7 +1,6 @@
 import pygame, sys
 from pygame.locals import *
-from game import *
-from hellow import windowSurface
+from classes import *
 
 # set up pygame
 pygame.init()
@@ -36,7 +35,7 @@ while inTitle == 1:  # Enter title screen
             pg.quit()
 
 
-
+game = Game(windowSurface)
 
 
 
@@ -48,7 +47,7 @@ pygame.display.update()
 while True:
     for event in pygame.event.get():
 
-        game.runGame()
+        game.run()
 
         if event.type == QUIT:
             pygame.quit()
