@@ -8,7 +8,7 @@ pygame.init()
 screenDim = {'width':1200, 'height':700}
 
 # set up the window
-windowSurface = pygame.display.set_mode((screenDim['width'], screenDim['height']), 0, 32)
+windowSurface = pygame.display.set_mode((screenDim['width'], screenDim['height']))
 
 
 # draw the white background onto the surface
@@ -41,7 +41,7 @@ game = Game(windowSurface)
 
 
 # draw the window onto the screen
-pygame.display.update()
+pygame.display.init()
 
 # run the game loop
 while True:
@@ -49,8 +49,6 @@ while True:
     game.run()
 
     for event in pygame.event.get():
-
-        game.player.move(event)
 
         if event.type == QUIT:
             pygame.quit()
